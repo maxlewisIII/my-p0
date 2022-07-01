@@ -1,19 +1,23 @@
 from flask import Flask
+from controller.customer_controller import cc
+from controller.accounts_controller import ac
 
-app = Flask(__name__)
 
+if __name__ == '__main__':
+    app = Flask(__name__)
 
-users = {
-    "Max": {
-        "phone": "828-446-0001"
-    }
-}
+    app.register_blueprint(cc)
+    app.register_blueprint(ac)
 
-@app.route('/users')
-def get_all_users():
-    return users
+    app.run(port=8082, debug=True)
 
 
 
 
-app.run(port=8080)
+
+
+
+
+
+
+
