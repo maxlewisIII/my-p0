@@ -1,14 +1,11 @@
 class Customer:
-    def __init__(self, id, username, mobile_phone, active):
+    def __init__(self, id, firstname):
         self.id = id
-        self.customer_name = customername
-        self.mobile_phone = mobile_phone
-        self.active = active
+        self.first_name = firstname
+
 
     def to_dict(self):
         return {
             "id": self.id,
-            "username": self.username,
-            "mobile_phone": self.mobile_phone,
-            "active": self.active
+            "first name": self.first_name,
         }
