@@ -66,3 +66,21 @@ class CustomerDao:
                     conn.commit()
 
                     return Customer(customer_row_that_was_just_inserted[0], customer_row_that_was_just_inserted[1])
+
+    def update_customer_by_id(self, customer_object):
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres",
+                             password="1234") as conn:
+            with conn.cursor() as cur:
+
+                cur.execute("UPDATE customers SET first_name = %s WHERE id = %s RETURNING *",
+                                (customer_object.first_name, customer_object.id))
+
+                conn.commit()
+
+                updated_customer_row = cur.fetchone()
+                if updated_customer_row is None:
+                    return None
+
+                return Customer(updated_customer_row[0], updated_customer_row[1])
+
+

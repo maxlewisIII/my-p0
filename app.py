@@ -3,8 +3,6 @@ from controller.customer_controller import cc
 from controller.accounts_controller import ac
 
 
-
-
 if __name__ == '__main__':
     app = Flask(__name__)
 

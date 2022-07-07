@@ -35,6 +35,15 @@ class CustomerService:
         added_customer_object = self.customer_dao.add_customer(customer_object)
         return added_customer_object.to_dict()
 
+    def update_customer_by_id(self, customer_object):
+        updated_customer_object = self.customer_dao.update_customer_by_id(customer_object)
+
+        if updated_customer_object is None:
+            raise CustomerNotFoundError(f"Customer with id {customer_object.id} was not found")
+
+        return updated_customer_object.to_dict()
+
+
 
 
 
