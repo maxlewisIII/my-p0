@@ -5,7 +5,8 @@ import copy
 
 class CustomerDao:
     def get_all_customers(self):
-        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres", password="1234") as conn:
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres",
+                             password="1234") as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT * FROM customers")
 
@@ -15,15 +16,14 @@ class CustomerDao:
                     c_id = customer[0]
                     first_name = customer[1]
 
-
-
                     my_customer_obj = Customer(c_id, first_name)
                     my_list_of_customer_objs.append(my_customer_obj)
 
                 return my_list_of_customer_objs
 
     def get_customer_by_id(self, customer_id):
-        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres", password="1234") as conn:
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres",
+                             password="1234") as conn:
             with conn.cursor() as cur:
 
                 cur.execute("SELECT * FROM customers WHERE id = %s", (customer_id,))
@@ -37,4 +37,32 @@ class CustomerDao:
 
                 return Customer(c_id, first_name)
 
+    def delete_customer_by_id(self, customer_id):
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres",
+                             password="1234") as conn:
+                with conn.cursor() as cur:
 
+                    cur.execute("DELETE FROM customers WHERE id = %s", (customer_id,))
+
+                    rows_deleted = cur.rowcount
+
+                    if rows_deleted != 1:
+                        return False
+                    else:
+                        conn.commit()
+                        return True
+
+    def add_customer(self, customer_object):
+        first_name_to_add = customer_object.first_name
+
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres",
+                             password="1234") as conn:
+                with conn.cursor() as cur:
+
+                    cur.execute("INSERT INTO customers (first_name) VALUES (%s) RETURNING *", (first_name_to_add,))
+
+                    customer_row_that_was_just_inserted = cur.fetchone()
+
+                    conn.commit()
+
+                    return Customer(customer_row_that_was_just_inserted[0], customer_row_that_was_just_inserted[1])
