@@ -23,3 +23,8 @@ class AccountsService:
             raise CustomerNotFoundError(f"Customer with id {customer_id} was not found")
 
         return account_obj.to_dict()
+
+    def delete_account_by_customer_id_and_account_id(self, customer_id, account_id):
+        if not self.accounts_dao.delete_account_by_customer_id_and_account_id(customer_id, account_id):
+            raise CustomerNotFoundError(f"Customer with id {account_id} was not found")
+
