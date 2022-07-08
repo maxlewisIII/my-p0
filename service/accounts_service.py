@@ -1,6 +1,7 @@
 from dao.accounts_dao import AccountsDao
 from dao.customer_dao import CustomerDao
 from exception.customer_not_found import CustomerNotFoundError
+from exception.account_not_found import AccountNotFoundError
 
 
 class AccountsService:
@@ -27,4 +28,10 @@ class AccountsService:
     def delete_account_by_customer_id_and_account_id(self, customer_id, account_id):
         if not self.accounts_dao.delete_account_by_customer_id_and_account_id(customer_id, account_id):
             raise CustomerNotFoundError(f"Customer with id {account_id} was not found")
+
+    def add_account_for_customer(self, account_object):
+        if not self.accounts_dao.add_account_for_customer(account_object):
+            raise AccountNotFoundError(f"Customer with id {account_object.id} was not found")
+        return self.accounts_dao.add_account_for_customer(account_object).to_dict()
+
 

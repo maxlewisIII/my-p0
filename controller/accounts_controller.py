@@ -1,6 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from model.account import Account
 
 from exception.customer_not_found import CustomerNotFoundError
+from exception.invalid_parameter import InvalidParameterError
 from service.accounts_service import AccountsService
 
 
@@ -42,6 +44,19 @@ def delete_account_by_customer_id_and_account_id(customer_id, account_id):
         return {
             "message": str(e)
         }, 404
+
+@ac.route('/customers/<customer_id>/accounts', methods=['POST'])
+def add_account_for_customer(customer_id):
+    account_json_dictionary = request.get_json()
+    account_object = Account(None, account_json_dictionary['balance'], account_json_dictionary['account_type_id'], customer_id)
+
+    try:
+        return accounts_service.add_account_for_customer(account_object), 201
+    except InvalidParameterError as e:
+        return {
+            "message": str(e)
+        }, 400
+
 
 
 

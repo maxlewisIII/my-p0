@@ -46,3 +46,27 @@ class AccountsDao:
                 else:
                     conn.commit()
                     return True
+
+    def add_account_for_customer(self, account_object):
+
+        balance_to_add = account_object.balance
+        type_to_add = account_object.account_type_id
+        customer_id_to_add = account_object.customer_id
+
+
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres", password="1234") as conn:
+
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO accounts (balance, customer_id, account_type_id) VALUES (%s, %s, %s) RETURNING *",
+                            (balance_to_add, type_to_add, customer_id_to_add))
+
+                account_row = cur.fetchone()
+
+                conn.commit()
+
+                return Account(account_row[0], account_row[1], account_row[2], account_row[3])
+
+
+
+
+
