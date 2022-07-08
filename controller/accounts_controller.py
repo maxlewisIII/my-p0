@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from model.account import Account
 
 from exception.customer_not_found import CustomerNotFoundError
+from exception.account_not_found import AccountNotFoundError
 from exception.invalid_parameter import InvalidParameterError
 from service.accounts_service import AccountsService
 
@@ -57,7 +58,17 @@ def add_account_for_customer(customer_id):
             "message": str(e)
         }, 400
 
+@ac.route('/customers/<customer_id>/accounts/<account_id>', methods=['PUT'])
+def update_account_for_customer(customer_id, account_id):
+    try:
+        account_json_dictionary = request.get_json()
+        return accounts_service.update_account_for_customer(Account(account_id, account_json_dictionary['balance'],
+                                                                    account_json_dictionary['account_type_id'], customer_id))
 
+    except AccountNotFoundError as e:
+        return {
+            "message": str(e)
+        }, 404
 
 
 

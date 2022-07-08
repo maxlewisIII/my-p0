@@ -66,6 +66,20 @@ class AccountsDao:
 
                 return Account(account_row[0], account_row[1], account_row[2], account_row[3])
 
+    def update_account_for_customer(self, account_object):
+        with psycopg.connect(host="127.0.0.1", port="5432", dbname="prj0", user="postgres", password="1234") as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE accounts SET account_type_id = %s, balance = %s WHERE id = %s and customer_id = %s RETURNING *",
+                            (account_object.account_type_id, account_object.balance, account_object.id, account_object.customer_id))
+
+                conn.commit()
+
+                account_row = cur.fetchone()
+                if account_row is None:
+                    return None
+
+                return Account(account_row[0], account_row[1], account_row[2], account_row[3])
+
 
 
 

@@ -31,7 +31,10 @@ class AccountsService:
 
     def add_account_for_customer(self, account_object):
         if not self.accounts_dao.add_account_for_customer(account_object):
-            raise AccountNotFoundError(f"Customer with id {account_object.id} was not found")
+            raise AccountNotFoundError(f"Account with id {account_object.id} was not found")
         return self.accounts_dao.add_account_for_customer(account_object).to_dict()
 
-
+    def update_account_for_customer(self, account_object):
+        if self.accounts_dao.update_account_for_customer(account_object) is None:
+            raise AccountNotFoundError(f"Account with id {account_object.id} was not found")
+        return self.accounts_dao.update_account_for_customer(account_object).to_dict()
